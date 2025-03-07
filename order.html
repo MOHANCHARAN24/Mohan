@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Order Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .order-list {
+            margin-top: 20px;
+        }
+        .order-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .order-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .order-list li span {
+            font-weight: bold;
+        }
+        .total {
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Food Order Scanner</h1>
+        <p>Scan or enter food item barcode/QR code:</p>
+        <input type="text" id="foodInput" placeholder="Enter code (e.g., apple, sandwich)">
+        <button onclick="addItemToOrder()">Add Item</button>
+
+        <div class="order-list">
+            <h2>Your Order</h2>
+            <ul id="orderList"></ul>
+            <p class="total" id="totalPrice">Total: $0.00</p>
+        </div>
+
+        <button onclick="checkout()">Checkout</button>
+    </div>
+
+    <script>
+        const menu = {
+            apple: { name: 'Apple', price: 1.2 },
+            sandwich: { name: 'Sandwich', price: 5.5 },
+            pizza: { name: 'Pizza', price: 8.0 },
+            burger: { name: 'Burger', price: 6.5 }
+        };
+
+        let order = [];
+
+        function addItemToOrder() {
+            const input = document.getElementById('foodInput').value.toLowerCase().trim();
+            if (menu[input]) {
+                const item = menu[input];
+                order.push(item);
+                updateOrderList();
+                document.getElementById('foodInput').value = ''; // clear the input
+            } else {
+                alert('Item not found! Please scan a valid item.');
+            }
+        }
+
+        function updateOrderList() {
+            const orderList = document.getElementById('orderList');
+            orderList.innerHTML = ''; // Clear the current list
+            let total = 0;
+
+            order.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `${item.name} - $${item.price.toFixed(2)}`;
+                orderList.appendChild(li);
+                total += item.price;
+            });
+
+            document.getElementById('totalPrice').innerHTML = `Total: $${total.toFixed(2)}`;
+        }
+
+        function checkout() {
+            if (order.length === 0) {
+                alert('Your order is empty! Add some items first.');
+            } else {
+                alert('Proceeding to payment...');
+                // Here, you would integrate with a payment API for actual checkout.
+                order = []; // Clear the order after checkout
+                updateOrderList(); // Update the order list (empty now)
+            }
+        }
+    </script>
+</body>
+</html>
